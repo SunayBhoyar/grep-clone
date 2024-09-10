@@ -38,9 +38,9 @@ int main(int argc, char* argv[]) {
     
     try {
         if (match_pattern(input_line, pattern)) {
-            return 1;
-        } else {
             return 0;
+        } else {
+            return 1;
         }
     } catch (const runtime_error& e) {
         cerr << e.what() << endl;
