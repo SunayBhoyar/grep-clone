@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <set>
+
 using namespace std ; 
 
 bool is_digit(const char& input_char){ 
@@ -58,6 +60,21 @@ bool match_pattern(const string& input_line, const string& pattern) {
                 }
             }
             pattern_ctr += 2 ; 
+        }
+        else if(pattern[pattern_ctr] == '['){
+            pattern_ctr ++ ; 
+            set<char> given_set ; 
+            while(pattern[pattern_ctr] != ']' && pattern_ctr < pattern.size()){
+                given_set.insert(pattern[pattern_ctr]) ; 
+                pattern_ctr ++ ; 
+            }
+            if(given_set.find(input_line[input_ctr]) == given_set.end()){
+                cout << "ad";
+                return false ; 
+            }else{
+                while(++input_ctr < input_line.size() && given_set.find(input_line[input_ctr]) != given_set.end()){}
+            }
+            pattern_ctr ++ ; 
         }
         else{
             if(input_line[input_ctr] != pattern[pattern_ctr]){
