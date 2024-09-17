@@ -64,15 +64,27 @@ bool match_pattern(const string& input_line, const string& pattern) {
         else if(pattern[pattern_ctr] == '['){
             pattern_ctr ++ ; 
             set<char> given_set ; 
+            bool posative = true ; 
             while(pattern[pattern_ctr] != ']' && pattern_ctr < pattern.size()){
-                given_set.insert(pattern[pattern_ctr]) ; 
+                if(pattern[pattern_ctr] == '^'){
+                    posative = false ;
+                }else{
+                    given_set.insert(pattern[pattern_ctr]) ; 
+                }
                 pattern_ctr ++ ; 
             }
-            if(given_set.find(input_line[input_ctr]) == given_set.end()){
-                cout << "ad";
-                return false ; 
+            if(posative){
+                if(given_set.find(input_line[input_ctr]) == given_set.end()){
+                    return false ; 
+                }else{
+                    while(++input_ctr < input_line.size() && given_set.find(input_line[input_ctr]) != given_set.end()){}
+                }
             }else{
-                while(++input_ctr < input_line.size() && given_set.find(input_line[input_ctr]) != given_set.end()){}
+                if(given_set.find(input_line[input_ctr]) != given_set.end()){
+                    return false ; 
+                }else{
+                    while(++input_ctr < input_line.size() && given_set.find(input_line[input_ctr]) == given_set.end()){}
+                }
             }
             pattern_ctr ++ ; 
         }
