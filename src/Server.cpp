@@ -1,13 +1,38 @@
 #include <iostream>
 #include <string>
 using namespace std ; 
+
+bool is_digit(const char& input_line){ 
+    if(input_line - '0' >= 0 && input_line - '0' < 10){
+        return true ;
+    }
+    return false ; 
+}
+
 bool match_pattern(const string& input_line, const string& pattern) {
-    if (pattern.length() == 1) {
-        return input_line.find(pattern) != string::npos;
+    // identifly the pattern expected 
+    int input_ctr = 0 ; 
+    int pattern_ctr = 0 ;
+    while(pattern_ctr < pattern.size()){
+        if(pattern[pattern_ctr] == '\\'){
+            if(pattern[pattern_ctr+1] == 'd'){
+                if(!is_digit(input_line[input_ctr])){
+                    return false ; 
+                }else{
+                    while(++input_ctr < input_line.size() && is_digit(input_ctr)){}
+                }
+            }
+            pattern_ctr += 2 ; 
+        }
+        else{
+            if(input_line[input_ctr] != pattern[pattern_ctr]){
+                return false ;
+            }
+            input_ctr ++ ; 
+            pattern_ctr ++ ; 
+        }
     }
-    else {
-        throw runtime_error("Unhandled pattern " + pattern);
-    }
+    return true ; 
 }
 
 int main(int argc, char* argv[]) {
@@ -38,8 +63,10 @@ int main(int argc, char* argv[]) {
     
     try {
         if (match_pattern(input_line, pattern)) {
+            // cout << "pattern found" ; 
             return 0;
         } else {
+            // cout << "pattern NOT found" ; 
             return 1;
         }
     } catch (const runtime_error& e) {
