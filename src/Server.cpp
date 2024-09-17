@@ -2,8 +2,35 @@
 #include <string>
 using namespace std ; 
 
-bool is_digit(const char& input_line){ 
-    if(input_line - '0' >= 0 && input_line - '0' < 10){
+bool is_digit(const char& input_char){ 
+    if(input_char - '0' >= 0 && input_char - '0' < 10){
+        return true ;
+    }
+    return false ; 
+}
+bool is_small_alphabet(const char& input_char){ 
+    if(input_char - 'a' >= 0 && input_char - 'a' < 26){
+        return true ;
+    }
+    return false ; 
+}
+
+bool is_capital_alphabet(const char& input_char){ 
+    if(input_char - 'A' >= 0 && input_char - 'Z' < 26){
+        return true ;
+    }
+    return false ; 
+}
+
+bool is_underscore(const char& input_char){ 
+    if(input_char == '_'){
+        return true ;
+    }
+    return false ; 
+}
+
+bool is_aplha_numeric(const char& input_char){
+    if(is_digit(input_char) || is_small_alphabet(input_char) || is_capital_alphabet(input_char) || is_underscore(input_char)){
         return true ;
     }
     return false ; 
@@ -19,7 +46,15 @@ bool match_pattern(const string& input_line, const string& pattern) {
                 if(!is_digit(input_line[input_ctr])){
                     return false ; 
                 }else{
-                    while(++input_ctr < input_line.size() && is_digit(input_ctr)){}
+                    while(++input_ctr < input_line.size() && is_digit(input_line[input_ctr])){}
+                }
+            }
+            else if(pattern[pattern_ctr+1] == 'w'){
+                if(!is_aplha_numeric(input_line[input_ctr])){
+                    return false ; 
+                }else{
+                    while(++input_ctr < input_line.size() && is_aplha_numeric(input_line[input_ctr])){
+                    }
                 }
             }
             pattern_ctr += 2 ; 
@@ -36,7 +71,6 @@ bool match_pattern(const string& input_line, const string& pattern) {
 }
 
 int main(int argc, char* argv[]) {
-    // Flush after every cout / cerr
     cout << unitbuf;
     cerr << unitbuf;
 
@@ -56,17 +90,16 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Uncomment this block to pass the first stage
     
     string input_line;
     getline(cin, input_line);
     
     try {
         if (match_pattern(input_line, pattern)) {
-            // cout << "pattern found" ; 
+            cout << "pattern found" ; 
             return 0;
         } else {
-            // cout << "pattern NOT found" ; 
+            cout << "pattern NOT found" ; 
             return 1;
         }
     } catch (const runtime_error& e) {
