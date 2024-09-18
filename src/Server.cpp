@@ -42,21 +42,27 @@ bool match_pattern(const string& input_line, const string& pattern) {
     // identifly the pattern expected 
     int input_ctr = 0 ; 
     int pattern_ctr = 0 ;
+    bool case_failed = false ; 
+
     while(pattern_ctr < pattern.size()){
+        if(input_ctr  == input_line.size()){
+            return false ;
+        }
         if(pattern[pattern_ctr] == '\\'){
             if(pattern[pattern_ctr+1] == 'd'){
                 if(!is_digit(input_line[input_ctr])){
-                    return false ; 
-                }else{
-                    while(++input_ctr < input_line.size() && is_digit(input_line[input_ctr])){}
+                    if(pattern_ctr != 0){ 
+                        case_failed = true ; 
+                    }
+                    pattern_ctr = -2 ;
                 }
             }
             else if(pattern[pattern_ctr+1] == 'w'){
                 if(!is_aplha_numeric(input_line[input_ctr])){
-                    return false ; 
-                }else{
-                    while(++input_ctr < input_line.size() && is_aplha_numeric(input_line[input_ctr])){
+                    if(pattern_ctr != 0){ 
+                        case_failed = true ; 
                     }
+                    pattern_ctr = -2 ; 
                 }
             }
             pattern_ctr += 2 ; 
@@ -65,36 +71,47 @@ bool match_pattern(const string& input_line, const string& pattern) {
             pattern_ctr ++ ; 
             set<char> given_set ; 
             bool posative = true ; 
+            int times_inc_pattern_ctr = 2 ; 
             while(pattern[pattern_ctr] != ']' && pattern_ctr < pattern.size()){
                 if(pattern[pattern_ctr] == '^'){
                     posative = false ;
                 }else{
                     given_set.insert(pattern[pattern_ctr]) ; 
                 }
-                pattern_ctr ++ ; 
+                pattern_ctr ++ ;
+                times_inc_pattern_ctr ++ ; 
             }
             if(posative){
                 if(given_set.find(input_line[input_ctr]) == given_set.end()){
-                    return false ; 
-                }else{
-                    while(++input_ctr < input_line.size() && given_set.find(input_line[input_ctr]) != given_set.end()){}
+                    if(pattern_ctr > times_inc_pattern_ctr){ 
+                        case_failed = true ; 
+                    }
+                    pattern_ctr -= times_inc_pattern_ctr ; 
                 }
             }else{
                 if(given_set.find(input_line[input_ctr]) != given_set.end()){
-                    return false ; 
-                }else{
-                    while(++input_ctr < input_line.size() && given_set.find(input_line[input_ctr]) == given_set.end()){}
+                    if(pattern_ctr > times_inc_pattern_ctr){ 
+                        case_failed = true ; 
+                    }
+                    pattern_ctr -= times_inc_pattern_ctr  ; 
                 }
             }
             pattern_ctr ++ ; 
         }
         else{
             if(input_line[input_ctr] != pattern[pattern_ctr]){
-                return false ;
+                if(pattern_ctr != 0){ 
+                    case_failed = true ; 
+                }
+                pattern_ctr = -1 ; 
             }
-            input_ctr ++ ; 
             pattern_ctr ++ ; 
         }
+        if(!case_failed){
+            input_ctr ++ ; 
+        }
+        case_failed = false ; 
+        
     }
     return true ; 
 }
