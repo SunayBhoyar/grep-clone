@@ -46,6 +46,9 @@ bool match_pattern(const string& input_line, const string& pattern) {
 
     while(pattern_ctr < pattern.size()){
         if(input_ctr  == input_line.size()){
+            if(pattern[pattern_ctr] == '$'){
+                return true ;
+            }
             return false ;
         }
         if(pattern[pattern_ctr] == '\\'){
@@ -103,6 +106,13 @@ bool match_pattern(const string& input_line, const string& pattern) {
                 return false ; 
             }
             pattern_ctr += 2 ; 
+        }
+        else if (pattern[pattern_ctr] == '$'){
+            if(input_line[input_ctr+1] == ' '){
+                return true ; 
+            } else{
+                pattern_ctr = 0 ; 
+            }
         }
         else{
             if(input_line[input_ctr] != pattern[pattern_ctr]){
