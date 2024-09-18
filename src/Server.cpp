@@ -98,6 +98,12 @@ bool match_pattern(const string& input_line, const string& pattern) {
             }
             pattern_ctr ++ ; 
         }
+        else if (pattern[pattern_ctr] == '^'){
+            if(input_line[input_ctr] != pattern[pattern_ctr+1]){
+                return false ; 
+            }
+            pattern_ctr += 2 ; 
+        }
         else{
             if(input_line[input_ctr] != pattern[pattern_ctr]){
                 if(pattern_ctr != 0){ 
