@@ -126,6 +126,9 @@ bool match_pattern(const string& input_line, const string& pattern) {
             }
             pattern_ctr ++ ; 
         }
+        else if (pattern[pattern_ctr] == '.' ){
+            pattern_ctr ++ ; 
+        }
         else{
             if(input_line[input_ctr] != pattern[pattern_ctr]){
                 if(pattern[pattern_ctr+1] == '?'){
