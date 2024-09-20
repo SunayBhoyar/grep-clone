@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <set>
+#include <vector>
 
 using namespace std ; 
 
@@ -100,6 +101,37 @@ bool match_pattern(const string& input_line, const string& pattern) {
                 }
             }
             pattern_ctr ++ ; 
+        }
+        else if(pattern[pattern_ctr] == '('){
+            pattern_ctr ++ ;
+            vector<string> option_of_patterns ; 
+            option_of_patterns.push_back("");
+            int option_of_patterns_ctr = 0 ;
+            while(pattern[pattern_ctr]!= ')' && pattern_ctr < pattern.size()){
+                if(pattern[pattern_ctr] != '|'){
+                    option_of_patterns[option_of_patterns_ctr] += pattern[pattern_ctr] ; 
+                }else{
+                    option_of_patterns.push_back("");
+                    option_of_patterns_ctr ++ ;
+                }
+                pattern_ctr ++ ; 
+            }
+            string given_word = "" ; 
+            while(input_ctr < input_line.size() && input_line[input_ctr] != ' ' ){
+                given_word += input_line[input_ctr] ;
+                input_ctr ++ ;
+            }
+            input_ctr -- ;
+            pattern_ctr ++ ; 
+            bool pattern_matched = false ; 
+            for (int i = 0 ; i < option_of_patterns.size() ;i ++){
+                if(option_of_patterns[i] == given_word){
+                    pattern_matched = true ; 
+                }
+            }
+            if(!pattern_matched){
+                return false ; 
+            }
         }
         else if (pattern[pattern_ctr] == '^'){
             if(input_line[input_ctr] != pattern[pattern_ctr+1]){
