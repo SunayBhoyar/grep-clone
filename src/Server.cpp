@@ -114,6 +114,18 @@ bool match_pattern(const string& input_line, const string& pattern) {
                 pattern_ctr = 0 ; 
             }
         }
+        else if (pattern[pattern_ctr] == '+'){
+            char last_char = input_line[input_ctr-1] ;
+            while(1){
+                if(input_line[input_ctr] == last_char){
+                    input_ctr ++ ; 
+                }else{ 
+                    input_ctr -- ;
+                    break ; 
+                }
+            }
+            pattern_ctr ++ ; 
+        }
         else{
             if(input_line[input_ctr] != pattern[pattern_ctr]){
                 if(pattern_ctr != 0){ 
