@@ -114,8 +114,8 @@ bool match_pattern(const string& input_line, const string& pattern) {
                 pattern_ctr = 0 ; 
             }
         }
-        else if (pattern[pattern_ctr] == '+'){
-            char last_char = input_line[input_ctr-1] ;
+        else if (pattern[pattern_ctr] == '+' || pattern[pattern_ctr] == '?'){
+            char last_char = pattern[pattern_ctr-1] ;
             while(1){
                 if(input_line[input_ctr] == last_char){
                     input_ctr ++ ; 
@@ -128,10 +128,14 @@ bool match_pattern(const string& input_line, const string& pattern) {
         }
         else{
             if(input_line[input_ctr] != pattern[pattern_ctr]){
-                if(pattern_ctr != 0){ 
-                    case_failed = true ; 
+                if(pattern[pattern_ctr+1] == '?'){
+                    input_ctr -- ; 
+                }else{
+                    if(pattern_ctr != 0){ 
+                        case_failed = true ; 
+                    }
+                    pattern_ctr = -1 ; 
                 }
-                pattern_ctr = -1 ; 
             }
             pattern_ctr ++ ; 
         }
