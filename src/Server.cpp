@@ -18,6 +18,7 @@ bool is_small_alphabet(const char& input_char){
     return false ; 
 }
 
+
 bool is_capital_alphabet(const char& input_char){ 
     if(input_char - 'A' >= 0 && input_char - 'Z' < 26){
         return true ;
